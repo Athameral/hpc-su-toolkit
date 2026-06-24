@@ -1,0 +1,18 @@
+# ============================================================
+# bashrc_local.sh — 用户本地覆盖（不进入版本控制）
+# ============================================================
+# 复制此文件为 bashrc_local.sh 并修改。
+# 该文件会被 bashrc_base.sh 自动加载。
+
+# --- 示例：覆盖 micromamba 根目录 ---
+# export MAMBA_ROOT_PREFIX=/share/home/team_xxx/.conda
+
+# --- 示例：覆盖 uv 相关目录 ---
+# export UV_TOOL_DIR="/another/path/.uv/tools"
+# export UV_TOOL_BIN_DIR="/another/path/.uv/bin"
+
+# --- 示例：添加自定义 PATH ---
+# export PATH="/my/custom/bin:$PATH"
+
+# --- 示例：添加自定义别名 ---
+# alias my_train="python /path/to/train.py"

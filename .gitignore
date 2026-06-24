@@ -1,0 +1,28 @@
+# ============================================================
+# .gitignore — HPC SU Toolkit
+# ============================================================
+
+# 静态工具 — 通过 bootstrap.sh -f / -u 从 zip 安装，不入库
+00_static_tools/*
+!00_static_tools/.gitkeep
+
+# 用户本地配置
+02_configs/bashrc_local.sh
+
+# 运行时产物
+sblogs/
+.uv/
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+
+# 大文件
+*.squashfs
+*.zip
