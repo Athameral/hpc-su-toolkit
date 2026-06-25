@@ -2,8 +2,8 @@
 # bashrc_entry.sh — 入口脚本
 # ============================================================
 # 推荐用法：将本仓库 clone 到 $HOME/<你的缩写>/ 下（如 ~/alice/），
-# 然后 bootstrap.sh 会自动把下面这行加到 ~/.bashrc：
-#   source /home/shared/alice/02_configs/bashrc_entry.sh
+# 登录后手动 source 即可（多人共用账号，不修改 ~/.bashrc）：
+#   source ~/alice/02_configs/bashrc_entry.sh
 #
 # 多用户共享同一账号时，每人 clone 到自己目录即可互相隔离。
 

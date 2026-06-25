@@ -64,13 +64,13 @@ echo "HPC_SU_HOME = $HPC_SU_HOME"
 echo ""
 
 # === 1. 设置脚本可执行权限 ===
-echo "[1/4] 设置脚本可执行权限..."
+echo "[1/3] 设置脚本可执行权限..."
 chmod +x "$HPC_SU_HOME/01_scripts/"*.sh 2>/dev/null || true
 chmod +x "$HPC_SU_HOME/scripts/"*.sh 2>/dev/null || true
 echo "  完成。"
 
 # === 2. 解压 / 下载静态工具 ===
-echo "[2/4] 安装静态工具..."
+echo "[2/3] 安装静态工具..."
 
 TOOLS_DIR="$HPC_SU_HOME/00_static_tools"
 mkdir -p "$TOOLS_DIR"
@@ -139,29 +139,13 @@ else
 fi
 
 # === 3. 创建 bashrc_local.sh ===
-echo "[3/4] 设置本地配置..."
+echo "[3/3] 设置本地配置..."
 if [ ! -f "$HPC_SU_HOME/02_configs/bashrc_local.sh" ]; then
     cp "$HPC_SU_HOME/02_configs/bashrc_local.sh.example" "$HPC_SU_HOME/02_configs/bashrc_local.sh"
     echo "  已创建 02_configs/bashrc_local.sh（从 .example 复制）"
     echo "  请根据需要编辑此文件。"
 else
     echo "  bashrc_local.sh 已存在，跳过。"
-fi
-
-# === 4. 添加到 ~/.bashrc ===
-echo "[4/4] 配置 ~/.bashrc..."
-BASHRC_LINE="source $HPC_SU_HOME/02_configs/bashrc_entry.sh  # HPC SU Toolkit"
-if [ -f "$HOME/.bashrc" ]; then
-    if grep -qF "HPC SU Toolkit" "$HOME/.bashrc" 2>/dev/null; then
-        echo "  ~/.bashrc 已包含入口，跳过。"
-    else
-        echo "" >> "$HOME/.bashrc"
-        echo "$BASHRC_LINE" >> "$HOME/.bashrc"
-        echo "  已添加 source 命令到 ~/.bashrc。"
-    fi
-else
-    echo "$BASHRC_LINE" > "$HOME/.bashrc"
-    echo "  已创建 ~/.bashrc。"
 fi
 
 # === 创建运行时目录 ===
@@ -172,8 +156,16 @@ echo "============================================"
 echo " 初始化完成！"
 echo "============================================"
 echo ""
-echo "下一步:"
-echo "  1. 重新登录或执行: source ~/.bashrc"
+echo "注意: 多人共用账号，不修改 ~/.bashrc。"
+echo "请每次登录后手动加载，或在你的 tmux/screen 启动脚本中添加:"
+echo ""
+echo "  source $HPC_SU_HOME/02_configs/bashrc_entry.sh"
+echo ""
+echo "或者创建一个别名方便使用:"
+echo "  alias hpc-init='source $HPC_SU_HOME/02_configs/bashrc_entry.sh'"
+echo ""
+echo "后续步骤:"
+echo "  1. 执行: source $HPC_SU_HOME/02_configs/bashrc_entry.sh"
 echo "  2. 编辑本地配置: $HPC_SU_HOME/02_configs/bashrc_local.sh"
 echo ""
 echo "快速测试:"
