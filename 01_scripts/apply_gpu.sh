@@ -16,8 +16,12 @@ while getopts ":c:h" opt; do
 done
 shift $((OPTIND - 1))
 
+# 自推断 HPC_SU_HOME（本脚本在 01_scripts/ 下，上一层即仓库根）
+_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export HPC_SU_HOME="${HPC_SU_HOME:-$(cd "$_SCRIPT_DIR/.." && pwd)}"
+
 if [ "$#" -le 2 ]; then
-    ACTUAL_USER="${ACTUAL_USER:-$(basename "$_HPC_SU_HOME")}"
+    ACTUAL_USER="${ACTUAL_USER:-$(basename "$HPC_SU_HOME")}"
     read -rp "作业名称 [默认 $ACTUAL_USER]: " job_name
     job_name=${job_name:-$ACTUAL_USER}
     read -rp "GPU 类型 (例如 l40) [默认 l40]: " name
@@ -44,7 +48,7 @@ else
         print_usage
         exit 0
     fi
-    ACTUAL_USER="${ACTUAL_USER:-$(basename "$_HPC_SU_HOME")}"
+    ACTUAL_USER="${ACTUAL_USER:-$(basename "$HPC_SU_HOME")}"
     job_name="$ACTUAL_USER"
     N=${1:-1}
     n=${2:-1}
@@ -63,12 +67,12 @@ fi
 
 echo "作业名 ${job_name}"
 echo "正在申请 ${N} 个节点，每节点 ${g} 张 ${name^^}；每个 task 使用 ${c} 个 CPU；task 数 ${n}。"
-_HPC_SU_HOME="${HPC_SU_HOME:-$HOME/hpc-su-toolkit}"
+
 if [ -n "${SQFS_PATH}" ]; then
     srun -p ${name^^} -N ${N} -n ${n} -J ${job_name} $server --gres=gpu:${name}:${g} --cpus-per-task=${c} --pty \
-     "$_HPC_SU_HOME/01_scripts/fast_bash_init.sh" \
+     "$HPC_SU_HOME/01_scripts/fast_bash_init.sh" \
      -c "$SQFS_PATH"
 else
     srun -p ${name^^} -N ${N} -n ${n} -J ${job_name} $server --gres=gpu:${name}:${g} --cpus-per-task=${c} --pty \
-     "$_HPC_SU_HOME/01_scripts/fast_bash_init.sh"
+     "$HPC_SU_HOME/01_scripts/fast_bash_init.sh"
 fi

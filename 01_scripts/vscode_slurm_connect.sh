@@ -1,5 +1,8 @@
 #!/bin/bash
-_HPC_SU_HOME="${HPC_SU_HOME:-$HOME/hpc-su-toolkit}"
+
+# 自推断 HPC_SU_HOME（本脚本在 01_scripts/ 下）
+_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export HPC_SU_HOME="${HPC_SU_HOME:-$(cd "$_SCRIPT_DIR/.." && pwd)}"
 
 JOB_NAME="hpc_su_vscode_remote"
 CPUS="${VSC_SLURM_CPUS:-4}"
@@ -7,7 +10,7 @@ MEM="${VSC_SLURM_MEM:-16G}"
 LOG_TIME=$(date "+%Y-%m-%d_%H-%M-%S")
 
 # 确保 slogs 目录存在
-mkdir -p "$_HPC_SU_HOME/sblogs"
+mkdir -p "$HPC_SU_HOME/sblogs"
 
 # 1. 异步启动任务 (使用 --parsable 获取 JOBID)
 JOB_ID=$(sbatch \
@@ -16,7 +19,7 @@ JOB_ID=$(sbatch \
     --mem="$MEM" \
     --parsable \
     --wrap="sleep infinity" \
-    --output="$_HPC_SU_HOME/sblogs/${LOG_TIME}.out")
+    --output="$HPC_SU_HOME/sblogs/${LOG_TIME}.out")
 
 echo "Got job id: $JOB_ID" >&2
 

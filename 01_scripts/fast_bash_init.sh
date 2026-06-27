@@ -1,7 +1,12 @@
 #!/bin/bash
 shopt -s expand_aliases
-_HPC_SU_HOME="${HPC_SU_HOME:-$HOME/hpc-su-toolkit}"
-source "$_HPC_SU_HOME/02_configs/bashrc_entry.sh"
+
+# 根据自身位置推断 HPC_SU_HOME（本脚本在 01_scripts/ 下，上一层即仓库根）
+# srun 到计算节点时 HPC_SU_HOME 可能没被传递，不能依赖环境变量
+_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export HPC_SU_HOME="${HPC_SU_HOME:-$(cd "$_SCRIPT_DIR/.." && pwd)}"
+
+source "$HPC_SU_HOME/02_configs/bashrc_entry.sh"
 
 while getopts ":c:" opt; do
     case ${opt} in
@@ -36,5 +41,5 @@ cleanup() {
 }
 trap cleanup EXIT INT TERM
 
-bash --noprofile --rcfile "$_HPC_SU_HOME/02_configs/bashrc_entry.sh"
+bash --noprofile --rcfile "$HPC_SU_HOME/02_configs/bashrc_entry.sh"
 
