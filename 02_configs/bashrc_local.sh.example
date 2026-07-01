@@ -19,5 +19,26 @@
 # --- 示例：添加自定义 PATH ---
 # export PATH="/my/custom/bin:$PATH"
 
+# --- 示例：OpenCode 配置 ---
+# OpenCode 是一个开源的 AI 编码代理（opencode.ai）。
+# 将二进制放入 00_static_tools/opencode 后，可通过以下变量控制路径。
+#
+# 核心环境变量（参考 https://opencode.ai/docs/zh-cn/config/）：
+#
+# 1) 配置文件路径（全局默认 ~/.config/opencode/opencode.json）
+#    多人共用账号时，改为指向 HPC_SU_HOME 下以隔离：
+# export OPENCODE_CONFIG="$HPC_SU_HOME/.opencode/opencode.json"
+#
+# 2) 配置目录（存放 agents/commands/plugins/themes/skills/tools 等子目录）
+#    等价于标准 .opencode 目录，改为用户独立路径：
+# export OPENCODE_CONFIG_DIR="$HPC_SU_HOME/.opencode"
+#
+# 3) 内联配置（运行时覆盖，优先级最高，适合临时调试）：
+# export OPENCODE_CONFIG_CONTENT='{"model":"anthropic/claude-sonnet-4-5","autoupdate":false}'
+#
+# 4) 各 Provider 的 API Key（按需设置，优先使用各 Provider 标准环境变量）：
+# export ANTHROPIC_API_KEY="sk-xxx"
+# export OPENAI_API_KEY="sk-xxx"
+
 # --- 示例：添加自定义别名 ---
 # alias my_train="python /path/to/train.py"
