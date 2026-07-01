@@ -10,9 +10,18 @@ source /etc/bashrc 2>/dev/null || true
 # === 推断实际用户 ===
 # 共享账号下 $USER 对所有人都一样，因此从目录名推断。
 # 约定：每人 clone 到 $HOME/<你的缩写>/，如 ~/alice/。
+# 如果 clone 到更深的位置（如 ~/lxz/hpc-su-toolkit/），
+# 自动取 $HOME 下的第一级目录名。
 # ACTUAL_USER 会作为 SLURM 作业名等场景的默认标识。
+# 可在 bashrc_local.sh 中覆盖: export ACTUAL_USER=your_name
 if [ -z "${ACTUAL_USER:-}" ]; then
-    export ACTUAL_USER="$(basename "$HPC_SU_HOME")"
+    if [[ "$HPC_SU_HOME" == "$HOME/"* ]]; then
+        _rel="${HPC_SU_HOME#$HOME/}"
+        export ACTUAL_USER="${_rel%%/*}"
+        unset _rel
+    else
+        export ACTUAL_USER="$(basename "$HPC_SU_HOME")"
+    fi
 fi
 
 # === micromamba (static binary) ===

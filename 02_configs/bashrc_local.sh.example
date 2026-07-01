@@ -4,6 +4,11 @@
 # 复制此文件为 bashrc_local.sh 并修改。
 # 该文件会被 bashrc_base.sh 自动加载。
 
+# --- 覆盖实际用户名（SLURM 作业名等默认标识） ---
+# 默认由 bashrc_base.sh 从目录结构自动推断。
+# 如果自动检测不准确，可在此强制指定：
+# export ACTUAL_USER="your_name"
+
 # --- 示例：覆盖 micromamba 根目录 ---
 # export MAMBA_ROOT_PREFIX=/share/home/team_xxx/.conda
 

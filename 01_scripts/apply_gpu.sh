@@ -20,8 +20,18 @@ shift $((OPTIND - 1))
 _SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export HPC_SU_HOME="${HPC_SU_HOME:-$(cd "$_SCRIPT_DIR/.." && pwd)}"
 
+# 推断 ACTUAL_USER（如果未通过环境变量设置）
+if [ -z "${ACTUAL_USER:-}" ]; then
+    if [[ "$HPC_SU_HOME" == "$HOME/"* ]]; then
+        _rel="${HPC_SU_HOME#$HOME/}"
+        ACTUAL_USER="${_rel%%/*}"
+        unset _rel
+    else
+        ACTUAL_USER="$(basename "$HPC_SU_HOME")"
+    fi
+fi
+
 if [ "$#" -le 2 ]; then
-    ACTUAL_USER="${ACTUAL_USER:-$(basename "$HPC_SU_HOME")}"
     read -rp "作业名称 [默认 $ACTUAL_USER]: " job_name
     job_name=${job_name:-$ACTUAL_USER}
     read -rp "GPU 类型 (例如 l40) [默认 l40]: " name
@@ -48,7 +58,6 @@ else
         print_usage
         exit 0
     fi
-    ACTUAL_USER="${ACTUAL_USER:-$(basename "$HPC_SU_HOME")}"
     job_name="$ACTUAL_USER"
     N=${1:-1}
     n=${2:-1}

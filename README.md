@@ -72,9 +72,11 @@ bash ~/alice/bootstrap.sh -f /path/to/static_tools.zip
 #  方式 B: 从远程 URL 下载
 bash ~/alice/bootstrap.sh -u https://your-server/static_tools.zip
 
-# 3. 重新登录或手动加载
-source ~/.bashrc
+# 3. 加载环境（多人共用账号，不修改 ~/.bashrc）
+source ~/alice/02_configs/bashrc_entry.sh
 ```
+
+> **注意**：bootstrap 不会修改 `~/.bashrc`。多人共用同一账号时，每人登录后手动 source 自己的 entry 脚本即可互不干扰。可将上述 source 命令加到个人 tmux/screen 启动脚本中。
 
 如果已经手动把静态工具放好了，直接 `bash ~/alice/bootstrap.sh`（会跳过工具安装）。
 
@@ -99,7 +101,7 @@ bash ~/bob/bootstrap.sh -u https://files.example.com/static_tools.zip
 
 ```bash
 export HPC_SU_TOOLS_URL="https://your-server/static_tools.zip"
-bash ~/ls/bootstrap.sh
+bash ~/charlie/bootstrap.sh -u https://...
 ```
 
 ## 典型用法
@@ -158,7 +160,7 @@ export VSC_SLURM_MEM=32G
 ```bash
 git clone <repo_url> ~/<你的缩写>
 bash ~/<你的缩写>/bootstrap.sh -f /path/to/static_tools.zip
-source ~/.bashrc
+source ~/<你的缩写>/02_configs/bashrc_entry.sh
 ```
 
 每人的 `HPC_SU_HOME` 自动指向自己的 clone 目录，环境天然隔离。
